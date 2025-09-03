@@ -1,1 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: #f8fafc;
+  color: #333;
+}
+
+.mat-toolbar {
+  background: #aee6ff !important;
+  color: #333 !important;
+}
+
+.mat-card {
+  background: #fffde7 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 24px rgba(174, 230, 255, 0.15);
+}
+
+.mat-raised-button.mat-primary {
+  background: #ffd6e0 !important;
+  color: #333 !important;
+}
+
+.mat-raised-button.mat-accent {
+  background: #b2f7ef !important;
+  color: #333 !important;
+}
+
+.mat-raised-button.mat-warn {
+  background: #ffb3c6 !important;
+  color: #333 !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: #e3fcec !important;
+}
+
+.mat-table {
+  background: #fff;
+}
+
+/* Estilos para los títulos y textos */
+h1, h2, h3 {
+  color: #333;
+}
+
+/* Personaliza los iconos Material */
+.mat-icon {
+  color: #6c63ff !important;
+}
