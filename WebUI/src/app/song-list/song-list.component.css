@@ -1,0 +1,101 @@
+.song-list-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fffde7;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(174, 230, 255, 0.15);
+  padding: 32px;
+}
+
+.mat-toolbar {
+  background: linear-gradient(90deg, #b2f7ef 0%, #ffd6e0 100%) !important;
+  color: #333 !important;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 2px 12px rgba(174, 230, 255, 0.12);
+  font-size: 1.1em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+}
+
+.mat-table {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(174, 230, 255, 0.10);
+  margin-top: 24px;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 14px 18px;
+  font-size: 1em;
+  color: #333;
+}
+
+.mat-header-row {
+  background: #aee6ff;
+  font-weight: bold;
+}
+
+.mat-row {
+  transition: background 0.2s;
+}
+
+.mat-row:hover {
+  background: #e3fcec;
+}
+
+.mat-icon-button {
+  background: #ffd6e0;
+  color: #6c63ff;
+  border-radius: 50%;
+  margin-right: 25px;
+  box-shadow: 0 2px 8px rgba(174, 230, 255, 0.10);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.mat-icon-button:hover {
+  background: #b2f7ef;
+  transform: scale(1.15);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.no-songs {
+  text-align: center;
+  margin: 32px 0;
+  font-size: 1.2em;
+  color: #bbb;
+}
+
+.menu-btn {
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(174, 230, 255, 0.12);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #b2f7ef !important;
+  color: #333 !important;
+}
+
+.menu-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(174, 230, 255, 0.22);
+  background: #ffd6e0 !important;
+}
+
+.menu-btn mat-icon {
+  font-size: 1em;
+  color: #6c63ff !important;
+  background: #fffde7;
+  border-radius: 50%;
+  padding: 3px;
+  box-shadow: 0 2px 8px rgba(174, 230, 255, 0.10);
+}
