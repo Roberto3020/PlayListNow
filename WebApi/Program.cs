@@ -28,8 +28,22 @@ builder.Services.AddHealthChecks()
            return memory < 500 ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy("High memory usage");
        });
 
-var app = builder.Build();
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy
+                .SetIsOriginAllowed(_ => true) // Permite cualquier origen (incluye cualquier puerto)
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
+var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
