@@ -1,0 +1,100 @@
+.welcome-container {
+  max-width: 600px;
+  margin: 60px auto;
+  background: linear-gradient(135deg, #2196f3 0%, #4caf50 100%);
+  color: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  padding: 48px 32px;
+  text-align: center;
+}
+.welcome-container h1 {
+  font-size: 2.5em;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+.welcome-container p {
+  font-size: 1.2em;
+  margin-bottom: 32px;
+}
+.welcome-actions {
+  margin-top: 32px;
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+}
+.welcome-btn {
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.welcome-btn.create {
+  background: #fff;
+  color: #2196f3;
+}
+.welcome-btn.create:hover {
+  background: #e3f2fd;
+  transform: scale(1.05);
+}
+.welcome-btn.list {
+  background: #fff;
+  color: #4caf50;
+}
+.welcome-btn.list:hover {
+  background: #c8e6c9;
+  transform: scale(1.05);
+}
+.fancy-btn {
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(174, 230, 255, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fancy-btn.mat-accent {
+  background: #b2f7ef !important;
+  color: #333 !important;
+}
+.fancy-btn.mat-primary {
+  background: #ffd6e0 !important;
+  color: #333 !important;
+}
+.fancy-btn:hover {
+  transform: scale(1.07);
+  box-shadow: 0 6px 24px rgba(174, 230, 255, 0.25);
+  background: #e3fcec !important;
+}
+.mat-icon {
+  font-size: 1em;
+  color: #6c63ff !important;
+  background: #fffde7;
+  border-radius: 50%;
+  padding: 3px;
+  box-shadow: 0 2px 8px rgba(174, 230, 255, 0.12);
+}
+.mat-toolbar {
+  background: linear-gradient(90deg, #aee6ff 0%, #ffd6e0 100%) !important;
+  color: #333 !important;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 2px 12px rgba(174, 230, 255, 0.12);
+  font-size: 1.3em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+}
+
+.mat-toolbar span {
+  flex: 1;
+  text-align: left;
+}

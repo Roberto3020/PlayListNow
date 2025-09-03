@@ -1,0 +1,15 @@
+<mat-card class="welcome-container" appearance="outlined">
+  <mat-toolbar color="primary">
+    <span>Play List</span>
+  </mat-toolbar>
+  <h1 style="margin-top: 24px;">Bienvenido a PlayListNow</h1>
+  <p>¡Gestiona tus canciones favoritas fácilmente!</p>
+  <div class="welcome-actions">
+    <button mat-raised-button color="accent" class="fancy-btn" (click)="goToCreate()">
+      <mat-icon>add</mat-icon> Crear Canción
+    </button>
+    <button mat-raised-button color="primary" class="fancy-btn" (click)="goToList()">
+      <mat-icon>list</mat-icon> Ver Listado
+    </button>
+  </div>
+</mat-card>
