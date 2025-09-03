@@ -1,0 +1,80 @@
+.song-form-container {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fffde7;
+  color: #333;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(174, 230, 255, 0.15);
+  padding: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.mat-toolbar {
+  background: linear-gradient(90deg, #ffd6e0 0%, #b2f7ef 100%) !important;
+  color: #333 !important;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 2px 12px rgba(174, 230, 255, 0.12);
+  font-size: 1.1em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 32px !important;
+  z-index: 1;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: #e3fcec !important;
+  border-radius: 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+button[mat-raised-button] {
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(174, 230, 255, 0.12);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button[mat-raised-button]:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(174, 230, 255, 0.22);
+  background: #b2f7ef !important;
+}
+
+.loading {
+  text-align: center;
+  margin: 32px 0;
+  font-size: 1.2em;
+}
+
+.date-picker-panel {
+  background: #141301 !important;
+  box-shadow: 0 4px 24px rgba(174, 230, 255, 0.25) !important;
+  border-radius: 16px !important;
+  border: 2px solid #b2f7ef !important;
+  z-index: 2000 !important;
+  margin-top: 40px !important;
+}
+
+.mat-calendar-table, .mat-calendar-body {
+  background: #fffde7 !important;
+  opacity: 1 !important;
+}

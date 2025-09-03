@@ -1,0 +1,42 @@
+<mat-card class="song-form-container" appearance="outlined">
+  <mat-toolbar color="primary">
+    <span>{{ isEdit ? 'Editar Canción' : 'Agregar Canción' }}</span>
+  </mat-toolbar>
+  <form (ngSubmit)="saveSong()" *ngIf="!loading" style="margin-top: 24px;" #songForm="ngForm">
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Título</mat-label>
+      <mat-icon matPrefix>music_note</mat-icon>
+    <input matInput type="text" [(ngModel)]="song.title" name="title" required minlength="2" maxlength="50" #title="ngModel" />
+      <mat-error *ngIf="title.invalid && (title.dirty || title.touched)">
+        El título es obligatorio y debe tener entre 2 y 50 caracteres.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Artista</mat-label>
+      <mat-icon matPrefix>person</mat-icon>
+    <input matInput type="text" [(ngModel)]="song.artist" name="artist" required minlength="2" maxlength="50" #artist="ngModel" />
+      <mat-error *ngIf="artist.invalid && (artist.dirty || artist.touched)">
+        El artista es obligatorio y debe tener entre 2 y 50 caracteres.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+      <mat-label>Duración (segundos)</mat-label>
+      <mat-icon matPrefix>timer</mat-icon>
+      <input matInput type="number" [(ngModel)]="song.duration" name="duration" required min="1" max="3600" #duration="ngModel" />
+      <mat-error *ngIf="duration.invalid && (duration.dirty || duration.touched)">
+        La duración es obligatoria y debe estar entre 1 y 3600 segundos.
+      </mat-error>
+    </mat-form-field>
+    <div class="form-actions" style="display: flex; gap: 16px; justify-content: flex-end;">
+      <button mat-raised-button color="primary" type="submit" [disabled]="songForm.invalid">
+        <mat-icon>{{ isEdit ? 'save' : 'add_circle' }}</mat-icon>
+        {{ isEdit ? 'Guardar Cambios' : 'Agregar' }}
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="cancel()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+    </div>
+  </form>
+  <div *ngIf="loading" class="loading" style="margin: 32px 0; text-align: center;">Cargando...</div>
+</mat-card>
