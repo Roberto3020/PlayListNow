@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  webapi:
+    build:
+      context: .
+      dockerfile: WebApi/Dockerfile
+    ports:
+      - "7173:7173"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+  webui:
+    build:
+      context: ./WebUI
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - webapi
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+volumes:
+  sqlserverdata:

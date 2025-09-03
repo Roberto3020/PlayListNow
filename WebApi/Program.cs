@@ -44,12 +44,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
+builder.WebHost.UseUrls("http://*:7173");
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
+  app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 app.UseHttpsRedirection();
 
