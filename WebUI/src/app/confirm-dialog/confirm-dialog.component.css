@@ -1,0 +1,21 @@
+.mat-dialog-actions {
+  margin-top: 16px;
+}
+button[mat-button] {
+  background: #b2f7ef;
+  color: #222;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-right: 8px;
+  box-shadow: 0 2px 8px rgba(178,247,239,0.15);
+}
+button[mat-raised-button] {
+  background: #ffb3b3;
+  color: #222;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(255,179,179,0.15);
+}
+button:hover {
+  filter: brightness(0.95);
+}
