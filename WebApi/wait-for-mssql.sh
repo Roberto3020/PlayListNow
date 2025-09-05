@@ -6,4 +6,9 @@ until /opt/mssql-tools/bin/sqlcmd -S tcp:db,1433 -U sa -P "Your_password123" -Q 
   echo "Esperando a que SQL Server esté disponible..."
   sleep 3
 done
+
+# Crea la base de datos si no existe
+echo "Verificando si existe la base de datos PlayListDB..."
+sqlcmd -S tcp:db,1433 -U sa -P "Your_password123" -Q "IF DB_ID('PlayListDB') IS NULL CREATE DATABASE PlayListDB"
+
 exec "$@"
