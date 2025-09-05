@@ -100,9 +100,4 @@ Así, cualquier persona que clone el repositorio tendrá la base de datos lista 
 
 ---
 
-## Notas
-- No uses `localhost` para comunicación entre servicios en Docker, usa el nombre del servicio.
-- No es necesario Nginx, pero puedes usarlo como reverse proxy si lo deseas.
-- No se permite Kubernetes ni orquestadores externos.
 
----
