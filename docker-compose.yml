@@ -1,23 +1,4 @@
-version: '3.8'
 services:
-  webapi:
-    build:
-      context: .
-      dockerfile: WebApi/Dockerfile
-    ports:
-      - "7173:7173"
-    depends_on:
-      - db
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-  webui:
-    build:
-      context: ./WebUI
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    depends_on:
-      - webapi
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
@@ -27,5 +8,37 @@ services:
       - "1433:1433"
     volumes:
       - sqlserverdata:/var/opt/mssql
+    networks:
+      - playlistnet
+
+  webapi:
+    build:
+      context: .
+      dockerfile: WebApi/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - playlistnet
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=PlayListDB;User=sa;Password=Your_password123;TrustServerCertificate=True;
+    depends_on:
+      - db
+    command: >
+      sh -c "./wait-for-mssql.sh dotnet ef database update --project DAL --startup-project WebApi && dotnet WebApi.dll"
+
+  webui:
+    build:
+      context: ./WebUI
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - playlistnet
+    depends_on:
+      - webapi
+
 volumes:
   sqlserverdata:
+networks:
+  playlistnet:
+    driver: bridge

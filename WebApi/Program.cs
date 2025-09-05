@@ -36,15 +36,15 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .SetIsOriginAllowed(_ => true) // Permite cualquier origen (incluye cualquier puerto)
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
         });
 });
 
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
-builder.WebHost.UseUrls("http://*:7173");
+builder.WebHost.UseUrls("http://*:8080");
 // Configure the HTTP request pipeline.
   app.UseSwagger();
     app.UseSwaggerUI();
