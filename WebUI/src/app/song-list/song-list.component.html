@@ -9,7 +9,7 @@
       <mat-icon>home</mat-icon> Inicio
     </button>
   </mat-toolbar>
-  <div *ngIf="loading" class="loading" style="margin: 32px 0; text-align: center;">Cargando...</div>
+  <div *ngIf="loading" class="loading" style="margin: 32px 0; text-align: center;">Cargando....</div>
   <table mat-table [dataSource]="songs" *ngIf="!loading && songs.length" class="mat-elevation-z8" style="width: 100%; margin-top: 24px;">
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef>Título</th>
