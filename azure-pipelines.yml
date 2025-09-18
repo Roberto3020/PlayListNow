@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: MyAgent
+  vmImage: rorcasitaAgent
 
 steps:
 - script: echo Hello, world!
