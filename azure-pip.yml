@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: MyAgent
+  name: rorcasitaAgent
 
 steps:
 - script: echo Hello, world!
