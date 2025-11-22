@@ -1,0 +1,105 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+# ===============================
+# 1. SonarCloud - PREPARE
+# ===============================
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud analysis'
+  inputs:
+    SonarCloud: 'SonarCloudService'
+    organization: 'rorcasita30'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'rorcasita30'
+    cliProjectName: 'rorcasita30'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://sonarcloud.io
+
+# ===============================
+# 2. Restore .NET dependencies
+# ===============================
+- task: DotNetCoreCLI@2
+  displayName: 'Restore backend'
+  inputs:
+    command: 'restore'
+    projects: 'backend/*.csproj'
+
+# ===============================
+# 3. Build .NET
+# ===============================
+- task: DotNetCoreCLI@2
+  displayName: 'Build backend'
+  inputs:
+    command: 'build'
+    projects: 'backend/*.csproj'
+    arguments: '--configuration Release'
+
+# ===============================
+# 4. Angular build
+# ===============================
+- script: |
+    cd frontend
+    npm install
+    npm run build
+  displayName: 'Build Angular frontend'
+
+# ===============================
+# 5. SonarCloud ANALYZE
+# ===============================
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis'
+
+# ===============================
+# 6. SonarCloud PUBLISH
+# ===============================
+- task: SonarCloudPublish@1
+  displayName: 'Publish SonarCloud Quality Gate'
+  inputs:
+    pollingTimeoutSec: '300'
+
+# ===============================
+# 7. Docker Login
+# ===============================
+- task: Docker@2
+  displayName: 'Login to Docker Hub'
+  inputs:
+    command: 'login'
+    containerRegistry: 'DockerHubServiceConnection'
+
+# ===============================
+# 8. Docker Build & Push Backend
+# ===============================
+- task: Docker@2
+  displayName: 'Build & Push backend image'
+  inputs:
+    command: 'buildAndPush'
+    repository: 'rorcasita30/playlist-backend'
+    dockerfile: 'backend/Dockerfile'
+    tags: |
+      latest
+
+# ===============================
+# 9. Docker Build & Push Frontend
+# ===============================
+- task: Docker@2
+  displayName: 'Build & Push frontend image'
+  inputs:
+    command: 'buildAndPush'
+    repository: 'rorcasita30/playlist-frontend'
+    dockerfile: 'frontend/Dockerfile'
+    tags: |
+      latest
+
+# ===============================
+# 10. Deploy to microk8s
+# ===============================
+- script: |
+    microk8s.kubectl apply -f k8s/
+  displayName: 'Deploy to microk8s'
