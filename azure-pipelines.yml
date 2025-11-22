@@ -71,7 +71,7 @@ steps:
   displayName: 'Login to Docker Hub'
   inputs:
     command: 'login'
-    containerRegistry: 'DockerHubServiceConnection'
+    containerRegistry: 'DockerHubConnection'
 
 # ===============================
 # 8. Docker Build & Push Backend
