@@ -1,17 +1,17 @@
 trigger:
 - main
 
-name: 'MyAgentPipeline'
-
 pool:
-  name: MyAgent   # Debe coincidir EXACTAMENTE con el nombre del pool donde está tu agente
-  demands: []     # Sin demands → no te pedirá java ni nada adicional
+  name: MyAgent
+  demands: []
+
+name: 'MyAgentPipeline'
 
 steps:
 
-# ===============================
+# ============================================
 # 1. SonarCloud - PREPARE
-# ===============================
+# ============================================
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
   inputs:
@@ -25,60 +25,60 @@ steps:
       sonar.sources=.
       sonar.host.url=https://sonarcloud.io
 
-# ===============================
-# 2. Restore .NET dependencies
-# ===============================
+# ============================================
+# 2. Restore .NET
+# ============================================
 - task: DotNetCoreCLI@2
   displayName: 'Restore backend'
   inputs:
     command: 'restore'
-    projects: 'backend/*.csproj'
+    projects: '**/*.csproj'   # MUCHAS MÁS POSIBILIDADES
 
-# ===============================
+# ============================================
 # 3. Build .NET
-# ===============================
+# ============================================
 - task: DotNetCoreCLI@2
   displayName: 'Build backend'
   inputs:
     command: 'build'
-    projects: 'backend/*.csproj'
+    projects: '**/*.csproj'
     arguments: '--configuration Release'
 
-# ===============================
-# 4. Angular build
-# ===============================
+# ============================================
+# 4. Build Angular
+# ============================================
 - script: |
     cd frontend
     npm install
     npm run build
   displayName: 'Build Angular frontend'
 
-# ===============================
+# ============================================
 # 5. SonarCloud ANALYZE
-# ===============================
+# ============================================
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud analysis'
 
-# ===============================
+# ============================================
 # 6. SonarCloud PUBLISH
-# ===============================
+# ============================================
 - task: SonarCloudPublish@1
   displayName: 'Publish SonarCloud Quality Gate'
   inputs:
     pollingTimeoutSec: '300'
 
-# ===============================
+# ============================================
 # 7. Docker Login
-# ===============================
+# ============================================
 - task: Docker@2
   displayName: 'Login to Docker Hub'
   inputs:
     command: 'login'
     containerRegistry: 'DockerHubConnection'
 
-# ===============================
+# ============================================
 # 8. Docker Build & Push Backend
-# ===============================
+# ============================================
 - task: Docker@2
   displayName: 'Build & Push backend image'
   inputs:
@@ -89,9 +89,9 @@ steps:
     tags: |
       latest
 
-# ===============================
+# ============================================
 # 9. Docker Build & Push Frontend
-# ===============================
+# ============================================
 - task: Docker@2
   displayName: 'Build & Push frontend image'
   inputs:
@@ -102,9 +102,9 @@ steps:
     tags: |
       latest
 
-# ===============================
-# 10. Deploy to microk8s (solo Linux)
-# ===============================
+# ============================================
+# 10. Deploy to microk8s
+# ============================================
 - script: |
-    echo "microk8s solo funciona si tu agente es Linux"
+    echo "⚠ microk8s no puede ejecutarse en Windows"
   displayName: 'Deploy to microk8s (solo Linux)'
