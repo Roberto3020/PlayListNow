@@ -1,11 +1,11 @@
 trigger:
 - main
 
-pool:
-  name: MyAgent
-  demands: []
-
 name: 'MyAgentPipeline'
+
+pool:
+  name: MyAgent   # Debe coincidir EXACTAMENTE con el nombre del pool donde está tu agente
+  demands: []     # Sin demands → no te pedirá java ni nada adicional
 
 steps:
 
@@ -103,9 +103,8 @@ steps:
       latest
 
 # ===============================
-# 10. Deploy to microk8s (⚠ Solo si tu agente es Linux)
+# 10. Deploy to microk8s (solo Linux)
 # ===============================
 - script: |
-    echo "⚠ microk8s no puede ejecutarse en Windows"
+    echo "microk8s solo funciona si tu agente es Linux"
   displayName: 'Deploy to microk8s (solo Linux)'
-
