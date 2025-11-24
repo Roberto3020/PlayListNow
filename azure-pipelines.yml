@@ -88,7 +88,7 @@ steps:
     command: 'buildAndPush'
     containerRegistry: 'DockerHubConnection'
     repository: 'rorcasita30/playlist-backend'
-    dockerfile: 'backend/Dockerfile'
+    dockerfile: 'WebApi/Dockerfile'
     tags: |
       latest
 
@@ -101,7 +101,7 @@ steps:
     command: 'buildAndPush'
     containerRegistry: 'DockerHubConnection'
     repository: 'rorcasita30/playlist-frontend'
-    dockerfile: 'frontend/Dockerfile'
+    dockerfile: 'WebUI/Dockerfile'
     tags: |
       latest
 
