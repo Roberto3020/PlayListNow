@@ -10,40 +10,24 @@ name: 'MyAgentPipeline'
 
 steps:
 
-# ========================
-# 0. Checkout del repositorio
-# ========================
-- checkout: self
+# ============================================
+# 1. Checkout
+# ============================================
+- task: Checkout@1
   displayName: 'Checkout code'
 
-# ========================
-# 1. SonarCloud Prepare
-# ========================
-- task: SonarCloudPrepare@1
-  displayName: 'Prepare SonarCloud analysis'
-  inputs:
-    SonarCloud: 'SonarCloudService'
-    organization: 'rorcasita30'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: 'rorcasita30'
-    cliProjectName: 'rorcasita30'
-    extraProperties: |
-      sonar.sources=.
-      sonar.host.url=https://sonarcloud.io
-
-# ========================
+# ============================================
 # 2. Restore .NET
-# ========================
+# ============================================
 - task: DotNetCoreCLI@2
   displayName: 'Restore backend'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
 
-# ========================
+# ============================================
 # 3. Build .NET
-# ========================
+# ============================================
 - task: DotNetCoreCLI@2
   displayName: 'Build backend'
   inputs:
@@ -51,43 +35,29 @@ steps:
     projects: '**/*.csproj'
     arguments: '--configuration Release'
 
-# ========================
+# ============================================
 # 4. Build Angular
-# ========================
+# ============================================
 - task: CmdLine@2
-  displayName: "Build Angular frontend"
+  displayName: 'Build Angular frontend'
   inputs:
-    workingDirectory: "$(Build.SourcesDirectory)/WebUI"
+    workingDirectory: 'WebUI'
     script: |
       npm install
       npm run build --prod
 
-# ========================
-# 5. SonarCloud Analyze
-# ========================
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis'
-
-# ========================
-# 6. SonarCloud Publish
-# ========================
-- task: SonarCloudPublish@1
-  displayName: 'Publish SonarCloud Quality Gate'
-  inputs:
-    pollingTimeoutSec: '300'
-
-# ========================
-# 7. Docker Login
-# ========================
+# ============================================
+# 5. Docker Login
+# ============================================
 - task: Docker@2
   displayName: 'Login to Docker Hub'
   inputs:
     command: 'login'
     containerRegistry: 'DockerHubConnection'
 
-# ========================
-# 8. Docker Build & Push Backend
-# ========================
+# ============================================
+# 6. Docker Build & Push Backend
+# ============================================
 - task: Docker@2
   displayName: 'Build & Push backend image'
   inputs:
@@ -98,9 +68,9 @@ steps:
     tags: |
       latest
 
-# ========================
-# 9. Docker Build & Push Frontend
-# ========================
+# ============================================
+# 7. Docker Build & Push Frontend
+# ============================================
 - task: Docker@2
   displayName: 'Build & Push frontend image'
   inputs:
@@ -111,9 +81,11 @@ steps:
     tags: |
       latest
 
-# ========================
-# 10. Deploy a microk8s
-# ========================
-- script: |
-    kubectl apply -f k8s/
+# ============================================
+# 8. Deploy to microk8s
+# ============================================
+- task: CmdLine@2
   displayName: 'Deploy to microk8s'
+  inputs:
+    script: |
+      microk8s kubectl apply -f k8s/
