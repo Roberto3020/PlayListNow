@@ -8,39 +8,42 @@ pool:
 
 name: 'MyAgentPipeline'
 
-variables:
-  system.debug: true  # Logs detallados para SonarCloud
-
 steps:
 
-# ============================================
-# 1. SonarCloud - PREPARE (Backend .NET)
-# ============================================
-- task: SonarCloudPrepare@1
-  displayName: 'Prepare SonarCloud analysis (.NET backend)'
-  inputs:
-    SonarCloud: 'SonarCloudService'  # tu service connection
-    organization: 'rorcasita30'
-    scannerMode: 'MSBuild'
-    configMode: 'manual'
-    projectKey: 'rorcasita30-backend'
-    projectName: 'RORCASITA30 Backend'
-    extraProperties: |
-      sonar.host.url=https://sonarcloud.io
-      sonar.verbose=true
+# ========================
+# 0. Checkout del repositorio
+# ========================
+- checkout: self
+  displayName: 'Checkout code'
 
-# ============================================
+# ========================
+# 1. SonarCloud Prepare
+# ========================
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud analysis'
+  inputs:
+    SonarCloud: 'SonarCloudService'
+    organization: 'rorcasita30'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'rorcasita30'
+    cliProjectName: 'rorcasita30'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://sonarcloud.io
+
+# ========================
 # 2. Restore .NET
-# ============================================
+# ========================
 - task: DotNetCoreCLI@2
   displayName: 'Restore backend'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
 
-# ============================================
+# ========================
 # 3. Build .NET
-# ============================================
+# ========================
 - task: DotNetCoreCLI@2
   displayName: 'Build backend'
   inputs:
@@ -48,15 +51,9 @@ steps:
     projects: '**/*.csproj'
     arguments: '--configuration Release'
 
-# ============================================
-# 4. SonarCloud ANALYZE (Backend .NET)
-# ============================================
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis (.NET backend)'
-
-# ============================================
-# 5. Build Angular
-# ============================================
+# ========================
+# 4. Build Angular
+# ========================
 - task: CmdLine@2
   displayName: "Build Angular frontend"
   inputs:
@@ -65,46 +62,32 @@ steps:
       npm install
       npm run build --prod
 
-# ============================================
-# 6. SonarCloud - OPTIONAL ANALYSIS (Frontend Angular)
-# ============================================
-- task: SonarCloudPrepare@1
-  displayName: 'Prepare SonarCloud analysis (Angular frontend)'
-  inputs:
-    SonarCloud: 'SonarCloudService'
-    organization: 'rorcasita30'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: 'rorcasita30-frontend'
-    cliProjectName: 'RORCASITA30 Frontend'
-    extraProperties: |
-      sonar.sources=.
-      sonar.host.url=https://sonarcloud.io
-      sonar.javascript.lcov.reportPaths=WebUI/coverage/lcov.info
-
+# ========================
+# 5. SonarCloud Analyze
+# ========================
 - task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis (Angular frontend)'
+  displayName: 'Run SonarCloud analysis'
 
-# ============================================
-# 7. SonarCloud PUBLISH
-# ============================================
+# ========================
+# 6. SonarCloud Publish
+# ========================
 - task: SonarCloudPublish@1
   displayName: 'Publish SonarCloud Quality Gate'
   inputs:
-    pollingTimeoutSec: '600'
+    pollingTimeoutSec: '300'
 
-# ============================================
-# 8. Docker Login
-# ============================================
+# ========================
+# 7. Docker Login
+# ========================
 - task: Docker@2
   displayName: 'Login to Docker Hub'
   inputs:
     command: 'login'
     containerRegistry: 'DockerHubConnection'
 
-# ============================================
-# 9. Docker Build & Push Backend
-# ============================================
+# ========================
+# 8. Docker Build & Push Backend
+# ========================
 - task: Docker@2
   displayName: 'Build & Push backend image'
   inputs:
@@ -115,9 +98,9 @@ steps:
     tags: |
       latest
 
-# ============================================
-# 10. Docker Build & Push Frontend
-# ============================================
+# ========================
+# 9. Docker Build & Push Frontend
+# ========================
 - task: Docker@2
   displayName: 'Build & Push frontend image'
   inputs:
@@ -128,9 +111,9 @@ steps:
     tags: |
       latest
 
-# ============================================
-# 11. Deploy to microk8s (solo Linux)
-# ============================================
+# ========================
+# 10. Deploy a microk8s
+# ========================
 - script: |
-    echo "⚠ microk8s deployment solo disponible en Linux"
+    kubectl apply -f k8s/
   displayName: 'Deploy to microk8s'
