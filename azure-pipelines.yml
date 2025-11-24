@@ -47,11 +47,14 @@ steps:
 # ============================================
 # 4. Build Angular
 # ============================================
-- script: |
-    cd frontend
-    npm install
-    npm run build
-  displayName: 'Build Angular frontend'
+- task: CmdLine@2
+  displayName: "Build Angular frontend"
+  inputs:
+    workingDirectory: "$(Build.SourcesDirectory)/WebUI"
+    script: |
+      npm install
+      npm run build --prod
+
 
 # ============================================
 # 5. SonarCloud ANALYZE
