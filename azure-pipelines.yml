@@ -6,26 +6,28 @@ pool:
   demands:
     - agent.os -equals Linux
 
-
 name: 'MyAgentPipeline'
+
+variables:
+  system.debug: true  # Logs detallados para SonarCloud
 
 steps:
 
 # ============================================
-# 1. SonarCloud - PREPARE
+# 1. SonarCloud - PREPARE (Backend .NET)
 # ============================================
 - task: SonarCloudPrepare@1
-  displayName: 'Prepare SonarCloud analysis'
+  displayName: 'Prepare SonarCloud analysis (.NET backend)'
   inputs:
-    SonarCloud: 'SonarCloudService'
+    SonarCloud: 'SonarCloudService'  # tu service connection
     organization: 'rorcasita30'
-    scannerMode: 'CLI'
+    scannerMode: 'MSBuild'
     configMode: 'manual'
-    cliProjectKey: 'rorcasita30'
-    cliProjectName: 'rorcasita30'
+    projectKey: 'rorcasita30-backend'
+    projectName: 'RORCASITA30 Backend'
     extraProperties: |
-      sonar.sources=.
       sonar.host.url=https://sonarcloud.io
+      sonar.verbose=true
 
 # ============================================
 # 2. Restore .NET
@@ -34,7 +36,7 @@ steps:
   displayName: 'Restore backend'
   inputs:
     command: 'restore'
-    projects: '**/*.csproj'   # MUCHAS MÁS POSIBILIDADES
+    projects: '**/*.csproj'
 
 # ============================================
 # 3. Build .NET
@@ -47,7 +49,13 @@ steps:
     arguments: '--configuration Release'
 
 # ============================================
-# 4. Build Angular
+# 4. SonarCloud ANALYZE (Backend .NET)
+# ============================================
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis (.NET backend)'
+
+# ============================================
+# 5. Build Angular
 # ============================================
 - task: CmdLine@2
   displayName: "Build Angular frontend"
@@ -57,23 +65,36 @@ steps:
       npm install
       npm run build --prod
 
+# ============================================
+# 6. SonarCloud - OPTIONAL ANALYSIS (Frontend Angular)
+# ============================================
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud analysis (Angular frontend)'
+  inputs:
+    SonarCloud: 'SonarCloudService'
+    organization: 'rorcasita30'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'rorcasita30-frontend'
+    cliProjectName: 'RORCASITA30 Frontend'
+    extraProperties: |
+      sonar.sources=.
+      sonar.host.url=https://sonarcloud.io
+      sonar.javascript.lcov.reportPaths=WebUI/coverage/lcov.info
 
-# ============================================
-# 5. SonarCloud ANALYZE
-# ============================================
 - task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis'
+  displayName: 'Run SonarCloud analysis (Angular frontend)'
 
 # ============================================
-# 6. SonarCloud PUBLISH
+# 7. SonarCloud PUBLISH
 # ============================================
 - task: SonarCloudPublish@1
   displayName: 'Publish SonarCloud Quality Gate'
   inputs:
-    pollingTimeoutSec: '300'
+    pollingTimeoutSec: '600'
 
 # ============================================
-# 7. Docker Login
+# 8. Docker Login
 # ============================================
 - task: Docker@2
   displayName: 'Login to Docker Hub'
@@ -82,7 +103,7 @@ steps:
     containerRegistry: 'DockerHubConnection'
 
 # ============================================
-# 8. Docker Build & Push Backend
+# 9. Docker Build & Push Backend
 # ============================================
 - task: Docker@2
   displayName: 'Build & Push backend image'
@@ -95,7 +116,7 @@ steps:
       latest
 
 # ============================================
-# 9. Docker Build & Push Frontend
+# 10. Docker Build & Push Frontend
 # ============================================
 - task: Docker@2
   displayName: 'Build & Push frontend image'
@@ -108,8 +129,8 @@ steps:
       latest
 
 # ============================================
-# 10. Deploy to microk8s
+# 11. Deploy to microk8s (solo Linux)
 # ============================================
 - script: |
-    echo "⚠ microk8s no puede ejecutarse en Windows"
-  displayName: 'Deploy to microk8s (solo Linux)'
+    echo "⚠ microk8s deployment solo disponible en Linux"
+  displayName: 'Deploy to microk8s'
