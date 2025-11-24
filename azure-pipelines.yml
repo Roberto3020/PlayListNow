@@ -1,7 +1,11 @@
 trigger:
 - main
 
- name: MyAgent'
+pool:
+  name: MyAgent
+  demands: []
+
+name: 'MyAgentPipeline'
 
 steps:
 
@@ -79,6 +83,7 @@ steps:
   displayName: 'Build & Push backend image'
   inputs:
     command: 'buildAndPush'
+    containerRegistry: 'DockerHubConnection'
     repository: 'rorcasita30/playlist-backend'
     dockerfile: 'backend/Dockerfile'
     tags: |
@@ -91,14 +96,16 @@ steps:
   displayName: 'Build & Push frontend image'
   inputs:
     command: 'buildAndPush'
+    containerRegistry: 'DockerHubConnection'
     repository: 'rorcasita30/playlist-frontend'
     dockerfile: 'frontend/Dockerfile'
     tags: |
       latest
 
 # ===============================
-# 10. Deploy to microk8s
+# 10. Deploy to microk8s (⚠ Solo si tu agente es Linux)
 # ===============================
 - script: |
-    microk8s.kubectl apply -f k8s/
-  displayName: 'Deploy to microk8s'
+    echo "⚠ microk8s no puede ejecutarse en Windows"
+  displayName: 'Deploy to microk8s (solo Linux)'
+
