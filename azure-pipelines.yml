@@ -1,5 +1,5 @@
 trigger:
-- main
+- master
 
 pool:
   name: MyAgent
@@ -60,11 +60,13 @@ steps:
 # ============================================
 - task: Docker@2
   displayName: 'Build & Push backend image'
+  timeoutInMinutes: 30
   inputs:
     command: 'buildAndPush'
     containerRegistry: 'DockerHubConnection'
     repository: 'rorcasita30/playlist-backend'
     dockerfile: 'WebApi/Dockerfile'
+    buildContext: '$(Build.SourcesDirectory)'
     tags: |
       latest
 
@@ -78,6 +80,7 @@ steps:
     containerRegistry: 'DockerHubConnection'
     repository: 'rorcasita30/playlist-frontend'
     dockerfile: 'WebUI/Dockerfile'
+    buildContext: '$(Build.SourcesDirectory)/WebUI'
     tags: |
       latest
 
