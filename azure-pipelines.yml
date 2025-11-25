@@ -1,0 +1,83 @@
+trigger:
+- main
+
+pool:
+  name: MyAgent
+  demands:
+    - agent.os -equals Linux
+
+name: 'MyAgentPipeline-Minimal'
+
+steps:
+
+# ============================================
+# 1. Checkout code
+# ============================================
+- checkout: self
+  displayName: 'Checkout code'
+
+# ============================================
+# 2. Restore .NET
+# ============================================
+- task: DotNetCoreCLI@2
+  displayName: 'Restore backend'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+# ============================================
+# 3. Build .NET
+# ============================================
+- task: DotNetCoreCLI@2
+  displayName: 'Build backend'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration Release'
+
+# ============================================
+# 4. Build Angular
+# ============================================
+- task: CmdLine@2
+  displayName: 'Build Angular frontend'
+  inputs:
+    workingDirectory: 'WebUI'
+    script: |
+      npm install
+      npm run build --prod
+  
+# ============================================
+# 5. Docker Login
+# ============================================
+- task: Docker@2
+  displayName: 'Login to Docker Hub'
+  inputs:
+    command: 'login'
+    containerRegistry: 'DockerHubConnection'
+
+# ============================================
+# 6. Docker Build & Push Backend
+# ============================================
+- task: Docker@2
+  displayName: 'Build & Push backend image'
+  inputs:
+    command: 'buildAndPush'
+    containerRegistry: 'DockerHubConnection'
+    repository: 'rorcasita30/playlist-backend'
+    dockerfile: 'WebApi/Dockerfile'
+    tags: |
+      latest
+
+# ============================================
+# 7. Docker Build & Push Frontend
+# ============================================
+- task: Docker@2
+  displayName: 'Build & Push frontend image'
+  inputs:
+    command: 'buildAndPush'
+    containerRegistry: 'DockerHubConnection'
+    repository: 'rorcasita30/playlist-frontend'
+    dockerfile: 'WebUI/Dockerfile'
+    tags: |
+      latest
+
